@@ -6,12 +6,22 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/19 15:39:23 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:02:39 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
 
 int	ft_size_line(char *buff)
 {
@@ -48,12 +58,15 @@ char	*get_next_line(int fd)
 	int				bytes_read;
 	int				size_l;
 	static char		*reminder = "";
-	static int		nb_reminder = 0;
+	int				size_reminder;
 
 	if (fd <= 0)
 		return (printf("ERREUR OUVERTURE"), NULL);
 	buffer = (char *)malloc(BUFFER_SIZE + 1 * sizeof(char));
-	//if (nb_reminder > 0)
+	if (ft_strlen(reminder) > 0)
+	{
+		
+	}
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (bytes_read == -1) 
         return(printf("ERREUR LECTURE"), NULL);
@@ -62,11 +75,11 @@ char	*get_next_line(int fd)
 		return(printf("Bytes read : %d\n", bytes_read), buffer);
 	if (bytes_read > size_l)
 	{
-		nb_reminder = bytes_read - size_l;
-		reminder = ft_strndup(buffer + bytes_read, BUFFER_SIZE - bytes_read);
-		printf("dup = %s\n", reminder);
-		dup = ft_strndup(buffer, bytes_read - nb_reminder + 1);
-		return (printf("Bytes read : %d\n", bytes_read - nb_reminder), dup);
+		size_reminder = bytes_read - size_l;
+		reminder = ft_strndup(buffer + size_l + 1, BUFFER_SIZE - bytes_read);
+		printf("Reminder = %s\n\n", reminder);
+		dup = ft_strndup(buffer, bytes_read - size_reminder + 1);
+		return (printf("Bytes read : %d\n", bytes_read - size_reminder), dup);
 	}
 	if (bytes_read < size_l)
 		bytes_read *= 2;
