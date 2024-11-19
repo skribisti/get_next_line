@@ -6,42 +6,12 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/19 12:14:26 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/19 15:39:23 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-
-/*char	*get_next_line(int fd)
-{
-	int		line_size;
-	char	*line;
-
-	line_size = 0;
-	
-}
-
-int	main(void)
-{
-	int		fd;
-	int		i;
-	char	*res;
-
-	fd = open("test.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		printf("ERREUR OUVERTURE\n");
-		return (0);
-	}
-	i = 0;
-	while(get_next_line(fd) != NULL)
-	{
-		get_next_line(fd);
-		i++;
-	}
-	printf("NB READED LINES :%d\n",i);
-}*/
 
 int	ft_size_line(char *buff)
 {
@@ -53,60 +23,64 @@ int	ft_size_line(char *buff)
 	return (i);
 }
 
+char	*ft_strndup(char *str, int n)
+{
+	char	*tab;
+	int		i;
+
+	tab = (char *)malloc(n + 1);
+	if (!tab)
+		return (NULL);
+	i = 0;
+	while (str[i] && i < n)
+	{
+		tab[i] = str[i];
+		i++;
+	}
+	tab[i] = 0;
+	return (tab);
+}
+
+char	*get_next_line(int fd)
+{
+	char 			*buffer;
+	char			*dup;
+	int				bytes_read;
+	int				size_l;
+	static char		*reminder = "";
+	static int		nb_reminder = 0;
+
+	if (fd <= 0)
+		return (printf("ERREUR OUVERTURE"), NULL);
+	buffer = (char *)malloc(BUFFER_SIZE + 1 * sizeof(char));
+	//if (nb_reminder > 0)
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read == -1) 
+        return(printf("ERREUR LECTURE"), NULL);
+	size_l = ft_size_line(buffer);
+	if (bytes_read == size_l)
+		return(printf("Bytes read : %d\n", bytes_read), buffer);
+	if (bytes_read > size_l)
+	{
+		nb_reminder = bytes_read - size_l;
+		reminder = ft_strndup(buffer + bytes_read, BUFFER_SIZE - bytes_read);
+		printf("dup = %s\n", reminder);
+		dup = ft_strndup(buffer, bytes_read - nb_reminder + 1);
+		return (printf("Bytes read : %d\n", bytes_read - nb_reminder), dup);
+	}
+	if (bytes_read < size_l)
+		bytes_read *= 2;
+	return (printf("Bytes read : %d\n", bytes_read), buffer);
+}
+
+
 #include <fcntl.h>
 int main() 
 {
-	int		fd;
-	int		real_fd;
-    char 	verif[BUFFER_SIZE];
-	int		real_BUFFER_SIZE;
-    ssize_t bytesRead;
-	ssize_t	real_bytesRead;
-	
-    fd = open("test.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		printf("ERREUR OUVERTURE\n");
-		return (0);
-	}
+	int	fd;
 
-
-	bytesRead = read(fd, verif, BUFFER_SIZE);
-	real_BUFFER_SIZE = ft_size_line(verif);
-	char	new[real_BUFFER_SIZE];
-	if (bytesRead > real_BUFFER_SIZE)
-	{
-		real_fd = open("test.txt", O_RDONLY);
-		if (real_fd == -1)
-			return (0);
-		real_bytesRead = read(real_fd, new, real_BUFFER_SIZE);
-		printf("Bytes read : %d\n", (int)real_bytesRead);
-    	printf("NEW = %s", new);  // Afficher les données lues à l'écran
-	}
-	else if (bytesRead < real_BUFFER_SIZE && bytesRead > 0)
-	{
-		real_fd = open("test.txt", O_RDONLY);
-		if (real_fd == -1)
-		{
-			printf("ERREUR OUVERTURE\n");
-			return (0);
-		}
-		real_bytesRead = read(real_fd, new, real_BUFFER_SIZE);
-		while (real_bytesRead < real_BUFFER_SIZE)
-			real_bytesRead++;
-		printf("Bytes read : %d\n", (int)real_bytesRead);
-    	printf("NEW = %s", new);  // Afficher les données lues à l'écran
-	}
-	else if (bytesRead == real_BUFFER_SIZE)
-	{
-		printf("Bytes read : %d\n", (int)bytesRead);
-    	printf("BUFF = %s", verif);  // Afficher les données lues à l'écran
-	}
-	
-    // Lire des données depuis le fichier
-    if (bytesRead == -1) 
-        printf("Erreur de lecture du fichier");
-
-    close(fd);  // Fermer le fichier
+	fd = open("test.txt", O_RDONLY);
+	printf("Buffer : %s;\n", get_next_line(fd));
+	close(fd);
     return 0;
 }
