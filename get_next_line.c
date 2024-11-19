@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/19 10:43:27 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/19 11:47:48 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,20 @@ int	ft_size_line(char *buff)
 	int	i;
 
 	i = 0;
-	while (buff[i] != '\n')
+	while (buff[i] != '\n' && buff[i])
 		i++;
-	return (i - 1);
+	return (i);
 }
 
 #include <fcntl.h>
 int main() 
 {
-	int	fd;
-	int	real_size;
+	int		fd;
+	int		real_fd;
+    char 	verif[BUFFER_SIZE];
+	int		real_BUFFER_SIZE;
     ssize_t bytesRead;
+	ssize_t	real_bytesRead;
 	
     fd = open("test.txt", O_RDONLY);
 	if (fd == -1)
@@ -67,18 +70,34 @@ int main()
 		return (0);
 	}
 
-    char 	verif[BUFFER_SIZE];
 
 	bytesRead = read(fd, verif, BUFFER_SIZE);
-	real_size = ft_size_line(verif);
-	char	new[real_size];
-	if (bytesRead > real_size)
+	real_BUFFER_SIZE = ft_size_line(verif);
+	char	new[real_BUFFER_SIZE];
+	if (bytesRead > real_BUFFER_SIZE)
 	{
-		bytesRead = read(fd, new, real_size);
-		printf("Bytes read : %d\n", (int)bytesRead);
+		real_fd = open("test.txt", O_RDONLY);
+		if (real_fd == -1)
+			return (0);
+		real_bytesRead = read(real_fd, new, real_BUFFER_SIZE);
+		printf("Bytes read : %d\n", (int)real_bytesRead);
     	printf("NEW = %s", new);  // Afficher les données lues à l'écran
 	}
-	else
+	else if (bytesRead < real_BUFFER_SIZE && bytesRead > 0)
+	{
+		real_fd = open("test.txt", O_RDONLY);
+		if (real_fd == -1)
+		{
+			printf("ERREUR OUVERTURE\n");
+			return (0);
+		}
+		real_bytesRead = read(real_fd, new, real_BUFFER_SIZE);
+		while (real_bytesRead < real_BUFFER_SIZE)
+			real_bytesRead++;
+		printf("Bytes read : %d\n", (int)real_bytesRead);
+    	printf("NEW = %s", new);  // Afficher les données lues à l'écran
+	}
+	else if (bytesRead == real_BUFFER_SIZE)
 	{
 		printf("Bytes read : %d\n", (int)bytesRead);
     	printf("BUFF = %s", verif);  // Afficher les données lues à l'écran
