@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/19 17:02:39 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/20 10:35:13 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,18 @@ int	ft_strlen(char *str)
 	while (str[i])
 		i++;
 	return (i);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((char *)s)[i] = 0;
+		i++;
+	}
 }
 
 int	ft_size_line(char *buff)
@@ -57,13 +69,13 @@ char	*get_next_line(int fd)
 	char			*dup;
 	int				bytes_read;
 	int				size_l;
-	static char		*reminder = "";
-	int				size_reminder;
+	static char		*remainder = "";
+	int				size_remainder;
 
 	if (fd <= 0)
 		return (printf("ERREUR OUVERTURE"), NULL);
 	buffer = (char *)malloc(BUFFER_SIZE + 1 * sizeof(char));
-	if (ft_strlen(reminder) > 0)
+	if (ft_strlen(remainder))
 	{
 		
 	}
@@ -75,14 +87,13 @@ char	*get_next_line(int fd)
 		return(printf("Bytes read : %d\n", bytes_read), buffer);
 	if (bytes_read > size_l)
 	{
-		size_reminder = bytes_read - size_l;
-		reminder = ft_strndup(buffer + size_l + 1, BUFFER_SIZE - bytes_read);
-		printf("Reminder = %s\n\n", reminder);
-		dup = ft_strndup(buffer, bytes_read - size_reminder + 1);
-		return (printf("Bytes read : %d\n", bytes_read - size_reminder), dup);
+		size_remainder = bytes_read - size_l;
+		remainder = ft_strndup(buffer + size_l, size_remainder);
+		if (size_remainder - 1)
+			printf("remainder = %s\n", remainder);
+		dup = ft_strndup(buffer, bytes_read - size_remainder +1);
+		return (printf("Bytes read : %d\n", bytes_read - size_remainder), dup);
 	}
-	if (bytes_read < size_l)
-		bytes_read *= 2;
 	return (printf("Bytes read : %d\n", bytes_read), buffer);
 }
 
@@ -93,7 +104,7 @@ int main()
 	int	fd;
 
 	fd = open("test.txt", O_RDONLY);
-	printf("Buffer : %s;\n", get_next_line(fd));
+	printf("Buffer : %s;", get_next_line(fd));
 	close(fd);
     return 0;
 }
