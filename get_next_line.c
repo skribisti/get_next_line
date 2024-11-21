@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/21 09:04:41 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/21 11:41:04 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,29 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	free(buffer);
 	return (remainder);
 }
+
 char	*ft_get_a_line(char *str)
 {
 	int		i;
 	char	*line;
 
 	i = 0;
+	if (!str[0] || !str)
+		return (NULL);
 	while (str[i] && str[i] != '\n')
 		i++;
 	line = ft_substr(str, 0, i + 1);
+	if (!line)
+	{
+		free(str);
+		return (NULL);
+	}
 	return (line);
-	
 }
+
 char	*ft_new_remainder(char *remainder)
 {
 	int		i;
-	int		j;
 	char	*str;
 
 	i = 0;
@@ -59,14 +66,13 @@ char	*ft_new_remainder(char *remainder)
 		free(remainder);
 		return (NULL);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(remainder) - i + 1));
-	if (!str)
-		return (NULL);
 	i++;
-	j = 0;
-	while (remainder[i])
-		str[j++] = remainder[i++];
-	str[j] = '\0';
+	str = ft_substr(remainder, i, ft_strlen(remainder) - i);
+	if (!str)
+	{
+		free(remainder);
+		return (NULL);
+	}
 	free(remainder);
 	return (str);
 }
@@ -86,14 +92,33 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-#include <fcntl.h>
-int main() 
+/*#include <fcntl.h>
+int	main(void)
 {
-	int	fd;
-
-	fd = open("test.txt", O_RDONLY);
-	printf("LINE1 = %s;\n", get_next_line(fd));
-	printf("LINE2 = %s;\n", get_next_line(fd));
-	close(fd);
-    return 0;
-}
+	char	*line;
+	int		i;
+	int		fd1;
+	int		fd2;
+	int		fd3;
+	fd1 = open("tests/test.txt", O_RDONLY);
+	fd2 = open("tests/test2.txt", O_RDONLY);
+	fd3 = open("tests/test3.txt", O_RDONLY);
+	i = 1;
+	while (i < 7)
+	{
+		line = get_next_line(fd1);
+		//printf("line [%02d]: %s", i, line);
+		free(line);
+		line = get_next_line(fd2);
+		//printf("line [%02d]: %s", i, line);
+		free(line);
+		line = get_next_line(fd3);
+		//printf("line [%02d]: %s", i, line);
+		free(line);
+		i++;
+	}
+	close(fd1);
+	close(fd2);
+	close(fd3);
+	return (0);
+}*/
