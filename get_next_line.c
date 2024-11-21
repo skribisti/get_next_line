@@ -6,131 +6,84 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/20 11:55:03 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/21 09:04:41 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-int	ft_strlen(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		((char *)s)[i] = 0;
-		i++;
-	}
-}
-
-int	ft_size_line(char *buff)
-{
-	int	i;
-
-	i = 0;
-	while (buff[i] != '\n' && buff[i])
-		i++;
-	return (i);
-}
-
-char	*ft_substr(char *s, int start, int len)
-{
-	int		i;
-	char	*str;
-
-	if (!s)
-		return (NULL);
-	if (start >= ft_strlen(s))
-		len = 0;
-	if (ft_strlen(s) - start < len)
-		len = ft_strlen(s) - start;
-	str = (char *)malloc(len + 1);
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (i < len && s[i])
-	{
-		str[i] = s[start + i];
-		i++;
-	}
-	str[i] = 0;
-	return (str);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	char	*str;
-	size_t	i;
-
-	str = malloc(nmemb * size);
-	if (!str)
-		return (NULL);
-	i = 0;
-	while (i < nmemb * size)
-	{
-		str[i] = 0;
-		i++;
-	}
-	return (str);
-}
-/*char	*ft_read_file(int fd, char *res)
+char	*ft_read_to_remainder(int fd, char *remainder)
 {
 	char	*buffer;
-	int		bytes_read;
+	int		read_bytes;
 
-	if (!res)
-		res = (char *)ft_calloc(1, sizeof(char));
-	buffer = (char *)calloc(BUFFER_SIZE + 1, sizeof(char));
-	bytes_read = 1;
-	while
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	read_bytes = 1;
+	while (!ft_strchr(remainder, '\n') && read_bytes != 0)
+	{
+		read_bytes = read(fd, buffer, BUFFER_SIZE);
+		if (read_bytes == -1)
+			return (free(buffer), NULL);
+		buffer[read_bytes] = 0;
+		remainder = ft_strjoin(remainder, buffer);
+	}
+	free(buffer);
+	return (remainder);
+}
+char	*ft_get_a_line(char *str)
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	line = ft_substr(str, 0, i + 1);
+	return (line);
 	
-}*/
+}
+char	*ft_new_remainder(char *remainder)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	while (remainder[i] && remainder[i] != '\n')
+		i++;
+	if (!remainder[i])
+	{
+		free(remainder);
+		return (NULL);
+	}
+	str = (char *)malloc(sizeof(char) * (ft_strlen(remainder) - i + 1));
+	if (!str)
+		return (NULL);
+	i++;
+	j = 0;
+	while (remainder[i])
+		str[j++] = remainder[i++];
+	str[j] = '\0';
+	free(remainder);
+	return (str);
+}
 
 char	*get_next_line(int fd)
 {
-	char 			*buffer;
-	char			*dup;
-	int				bytes_read;
-	int				size_l;
-	static char		*remainder = "";
-	int				size_remainder;
+	static char		*remainder;
+	char			*line;
 
-	if (fd < 0)
-	{
-		free(remainder);
-		buffer = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	}
-	//buffer = ft_read_file(fd, buffer);
-	
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (bytes_read == -1) 
-        return(printf("ERREUR LECTURE"), NULL);
-	size_l = ft_size_line(buffer);
-	if (bytes_read == size_l)
-		return(printf("Bytes read : %d\n", bytes_read), buffer);
-	if (bytes_read > size_l)
-	{
-		size_remainder = bytes_read - size_l;
-		remainder = ft_substr(buffer, size_l + 1, size_remainder);
-		if (size_remainder - 1)
-			printf("remainder = %s\n\n", remainder);
-		dup = ft_substr(buffer, 0, bytes_read - size_remainder + 1);
-		return (printf("Bytes read : %d\n", bytes_read - size_remainder), dup);
-	}
-	return (printf("Bytes read : %d\n", bytes_read), buffer);
+	remainder = ft_read_to_remainder(fd, remainder);
+	if (!remainder)
+		return (NULL);
+	line = ft_get_a_line(remainder);
+	remainder = ft_new_remainder(remainder);
+	return (line);
 }
 
 #include <fcntl.h>
@@ -139,7 +92,8 @@ int main()
 	int	fd;
 
 	fd = open("test.txt", O_RDONLY);
-	printf("Buffer : %s;", get_next_line(fd));
+	printf("LINE1 = %s;\n", get_next_line(fd));
+	printf("LINE2 = %s;\n", get_next_line(fd));
 	close(fd);
     return 0;
 }
