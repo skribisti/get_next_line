@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/22 10:31:00 by norabino         ###   ########.fr       */
+/*   Created: 2024/11/22 10:16:40 by norabino          #+#    #+#             */
+/*   Updated: 2024/11/22 10:24:01 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ char	*ft_get_a_line(char *str)
 	if (!line)
 	{
 		free(str);
-		free(line);
 		return (NULL);
 	}
 	return (line);
@@ -80,46 +79,15 @@ char	*ft_new_remainder(char *remainder)
 
 char	*get_next_line(int fd)
 {
-	static char		*remainder;
+	static char		*remainder[4096];
 	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (free(remainder), NULL);
-	remainder = ft_read_to_remainder(fd, remainder);
-	if (!remainder)
 		return (NULL);
-	line = ft_get_a_line(remainder);
-	remainder = ft_new_remainder(remainder);
+	remainder[fd] = ft_read_to_remainder(fd, remainder[fd]);
+	if (!remainder[fd])
+		return (NULL);
+	line = ft_get_a_line(remainder[fd]);
+	remainder[fd] = ft_new_remainder(remainder[fd]);
 	return (line);
 }
-
-/*#include <fcntl.h>
-int	main(void)
-{
-	char	*line;
-	int		i;
-	int		fd1;
-	int		fd2;
-	int		fd3;
-	fd1 = open("tests/test.txt", O_RDONLY);
-	fd2 = open("tests/test2.txt", O_RDONLY);
-	fd3 = open("tests/test3.txt", O_RDONLY);
-	i = 1;
-	while (i < 7)
-	{
-		line = get_next_line(fd1);
-		//printf("line [%02d]: %s", i, line);
-		free(line);
-		line = get_next_line(fd2);
-		//printf("line [%02d]: %s", i, line);
-		free(line);
-		line = get_next_line(fd3);
-		//printf("line [%02d]: %s", i, line);
-		free(line);
-		i++;
-	}
-	close(fd1);
-	close(fd2);
-	close(fd3);
-	return (0);
-}*/
