@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/22 10:31:00 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/22 12:07:12 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (read_bytes == -1)
-			return (free(buffer), NULL);
+			return (free(remainder), free(buffer), NULL);
 		buffer[read_bytes] = 0;
 		remainder = ft_strjoin(remainder, buffer);
 	}
@@ -84,7 +84,7 @@ char	*get_next_line(int fd)
 	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (free(remainder), NULL);
+		return (NULL);
 	remainder = ft_read_to_remainder(fd, remainder);
 	if (!remainder)
 		return (NULL);
