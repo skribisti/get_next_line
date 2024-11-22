@@ -6,12 +6,11 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/22 12:07:12 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/22 15:55:18 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*ft_read_to_remainder(int fd, char *remainder)
 {
@@ -29,6 +28,8 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 			return (free(remainder), free(buffer), NULL);
 		buffer[read_bytes] = 0;
 		remainder = ft_strjoin(remainder, buffer);
+		if (!remainder)
+			return (free(buffer), NULL);
 	}
 	free(buffer);
 	return (remainder);
@@ -48,7 +49,6 @@ char	*ft_get_a_line(char *str)
 	if (!line)
 	{
 		free(str);
-		free(line);
 		return (NULL);
 	}
 	return (line);
