@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:19:40 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/25 08:47:19 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/25 09:04:41 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	*ft_check_join(char **s1, char **s2)
 		*s1 = (char *)malloc(1 * sizeof(char));
 		if (!*s1)
 			return (NULL);
-		(*s1)[0] = '\0';
+		(*s1)[0] = 0;
 	}
 	if (!*s2)
 		return (NULL);
