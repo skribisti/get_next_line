@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 08:41:00 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/25 08:13:22 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/25 08:47:27 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,18 @@ char	*ft_substr(char *s, int start, int len)
 
 void	*ft_check_join(char **s1, char **s2)
 {
+	if (!*s1 && !*s2)
+		return (NULL);
 	if (!*s1)
 	{
 		*s1 = (char *)malloc(1 * sizeof(char));
 		if (!*s1)
 			return (NULL);
-		*s1[0] = '\0';
+		(*s1)[0] = '\0';
 	}
-	if (!*s1 || !*s2)
+	if (!*s2)
 		return (NULL);
-	return (s1);
+	return ("CHECK OK");
 }
 
 char	*ft_strjoin(char *s1, char *s2)
