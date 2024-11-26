@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/26 10:28:16 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/26 11:02:10 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,20 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	return (remainder);
 }
 
-char	*ft_get_a_line(char *rem)
+char	*ft_get_a_line(char *remainder)
 {
 	int		i;
 	char	*line;
 
 	i = 0;
-	if (!rem[0] || !rem)
+	if (!remainder[0] || !remainder)
 		return (NULL);
-	while (rem[i] && rem[i] != '\n')
+	while (remainder[i] && remainder[i] != '\n')
 		i++;
-	line = ft_substr(rem, 0, i + 1);
-	if (!line && rem)
+	line = ft_substr(remainder, 0, i + 1);
+	if (!line && remainder)
 	{
-		free(rem);
+		free(remainder);
 		return (NULL);
 	}
 	return (line);
