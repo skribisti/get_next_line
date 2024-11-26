@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:16:40 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/26 09:23:22 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/26 09:34:42 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	while (!ft_strchr(remainder, '\n') && read_bytes != 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
-		if (read_bytes == -1 || (read_bytes == 0 && !remainder))
-			return (free(remainder), free(buffer), NULL);
+		if (read_bytes == -1)
+			return (free(remainder), remainder = NULL, free(buffer), NULL);
+		if (read_bytes == 0 && !remainder)
+			return (free(buffer), NULL);
 		buffer[read_bytes] = 0;
 		remainder = ft_strjoin(remainder, buffer);
 		if (!remainder)
@@ -63,15 +65,16 @@ char	*ft_new_remainder(char *remainder)
 	while (remainder[i] && remainder[i] != '\n')
 		i++;
 	if (!remainder[i])
-	{
-		free(remainder);
-		return (NULL);
-	}
+		return (free(remainder), remainder = NULL, NULL);
 	i++;
 	str = ft_substr(remainder, i, ft_strlen(remainder) - i);
 	if (!str)
 		return (NULL);
-	free(remainder);
+	if (remainder)
+	{
+		free(remainder);
+		remainder = NULL;
+	}
 	return (str);
 }
 
