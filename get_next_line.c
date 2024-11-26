@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/25 15:07:09 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/26 09:22:51 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	while (!ft_strchr(remainder, '\n') && read_bytes != 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
-		if (read_bytes == -1)
+		if (read_bytes == -1 || (read_bytes == 0 && !remainder))
 			return (free(remainder), free(buffer), NULL);
 		buffer[read_bytes] = 0;
 		remainder = ft_strjoin(remainder, buffer);
@@ -70,10 +70,7 @@ char	*ft_new_remainder(char *remainder)
 	i++;
 	str = ft_substr(remainder, i, ft_strlen(remainder) - i);
 	if (!str)
-	{
-		free(remainder);
 		return (NULL);
-	}
 	free(remainder);
 	return (str);
 }
@@ -92,20 +89,20 @@ char	*get_next_line(int fd)
 	remainder = ft_new_remainder(remainder);
 	return (line);
 }
-
 /*#include <fcntl.h>
 #include <stdio.h>
 int	main(void)
 {
 	char	*line;
-	int		i;
+	int i = 1;
 	int		fd1;
 	
 	fd1 = open("test.txt", O_RDONLY);
 
-	i = 0;
-	printf("%s",get_next_line(fd1));
-	while (i < 6)
+	line = get_next_line(fd1);
+	printf("%s",line);
+	free(line);
+	while (line)
 	{
 		line = get_next_line(fd1);
 		printf("line [%d]: %s", i, line);

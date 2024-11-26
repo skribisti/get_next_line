@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 08:41:00 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/25 09:04:32 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/26 09:20:03 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*ft_substr(char *s, int start, int len)
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (i < len && s[i])
+	while (i < len && s[start + i])
 	{
 		str[i] = s[start + i];
 		i++;
@@ -75,7 +75,7 @@ void	*ft_check_join(char **s1, char **s2)
 	}
 	if (!*s2)
 		return (NULL);
-	return ("CHECK OK");
+	return (*s1);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -92,8 +92,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	i = -1;
 	j = 0;
 	if (s1)
+	{
 		while (s1[++i] != '\0')
 			str[i] = s1[i];
+	}
 	while (s2[j] != '\0')
 		str[i++] = s2[j++];
 	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
