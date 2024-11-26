@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/26 09:54:55 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:28:16 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	while (!ft_strchr(remainder, '\n') && read_bytes != 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
-		if (read_bytes == -1)
+		if (read_bytes == -1 && remainder)
 			return (free(remainder), remainder = NULL, free(buffer), NULL);
 		if (read_bytes == 0 && !remainder)
 			return (free(buffer), NULL);
@@ -37,20 +37,20 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	return (remainder);
 }
 
-char	*ft_get_a_line(char *str)
+char	*ft_get_a_line(char *rem)
 {
 	int		i;
 	char	*line;
 
 	i = 0;
-	if (!str[0] || !str)
+	if (!rem[0] || !rem)
 		return (NULL);
-	while (str[i] && str[i] != '\n')
+	while (rem[i] && rem[i] != '\n')
 		i++;
-	line = ft_substr(str, 0, i + 1);
-	if (!line)
+	line = ft_substr(rem, 0, i + 1);
+	if (!line && rem)
 	{
-		free(str);
+		free(rem);
 		return (NULL);
 	}
 	return (line);
@@ -59,7 +59,7 @@ char	*ft_get_a_line(char *str)
 char	*ft_new_remainder(char *remainder)
 {
 	int		i;
-	char	*str;
+	char	*new;
 
 	i = 0;
 	while (remainder[i] && remainder[i] != '\n')
@@ -67,15 +67,15 @@ char	*ft_new_remainder(char *remainder)
 	if (!remainder[i])
 		return (free(remainder), remainder = NULL, NULL);
 	i++;
-	str = ft_substr(remainder, i, ft_strlen(remainder) - i);
-	if (!str)
+	new = ft_substr(remainder, i, ft_strlen(remainder) - i);
+	if (!new)
 		return (NULL);
 	if (remainder)
 	{
 		free(remainder);
 		remainder = NULL;
 	}
-	return (str);
+	return (new);
 }
 
 char	*get_next_line(int fd)

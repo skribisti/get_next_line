@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:16:40 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/26 09:34:42 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/26 10:17:59 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*ft_get_a_line(char *str)
 char	*ft_new_remainder(char *remainder)
 {
 	int		i;
-	char	*str;
+	char	*new;
 
 	i = 0;
 	while (remainder[i] && remainder[i] != '\n')
@@ -67,15 +67,15 @@ char	*ft_new_remainder(char *remainder)
 	if (!remainder[i])
 		return (free(remainder), remainder = NULL, NULL);
 	i++;
-	str = ft_substr(remainder, i, ft_strlen(remainder) - i);
-	if (!str)
+	new = ft_substr(remainder, i, ft_strlen(remainder) - i);
+	if (!new)
 		return (NULL);
 	if (remainder)
 	{
 		free(remainder);
 		remainder = NULL;
 	}
-	return (str);
+	return (new);
 }
 
 char	*get_next_line(int fd)
@@ -92,7 +92,6 @@ char	*get_next_line(int fd)
 	remainder[fd] = ft_new_remainder(remainder[fd]);
 	return (line);
 }
-
 /*#include <fcntl.h>
 #include <stdio.h>
 int	main(void)
