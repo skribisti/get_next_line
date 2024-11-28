@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:16:40 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/26 10:17:59 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/28 08:22:47 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	char	*buffer;
 	int		read_bytes;
 
+	if (remainder && ft_strchr(remainder, '\n'))
+		return (remainder);
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
@@ -37,20 +39,20 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	return (remainder);
 }
 
-char	*ft_get_a_line(char *str)
+char	*ft_get_a_line(char *remainder)
 {
 	int		i;
 	char	*line;
 
 	i = 0;
-	if (!str[0] || !str)
+	if (!remainder[0] || !remainder)
 		return (NULL);
-	while (str[i] && str[i] != '\n')
+	while (remainder[i] && remainder[i] != '\n')
 		i++;
-	line = ft_substr(str, 0, i + 1);
+	line = ft_substr(remainder, 0, i + 1);
 	if (!line)
 	{
-		free(str);
+		free(remainder);
 		return (NULL);
 	}
 	return (line);

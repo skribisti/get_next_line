@@ -1,0 +1,4 @@
+salut
+bonjour
+aurevoir
+allo

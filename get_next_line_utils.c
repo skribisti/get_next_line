@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 08:41:00 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/26 10:27:15 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/28 08:24:53 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_strchr(char *str, char c)
 	while (str[i] != c && str[i])
 		i++;
 	if (str[i] == c)
-		return ((char *)&str[i]);
+		return (&str[i]);
 	return (NULL);
 }
 
