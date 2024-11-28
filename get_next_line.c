@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/28 08:34:14 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/28 09:03:04 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_read_to_remainder(int fd, char *remainder)
 	while (!ft_strchr(remainder, '\n') && read_bytes != 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
-		if (read_bytes == -1 && remainder)
+		if (read_bytes == -1)
 			return (free(remainder), remainder = NULL, free(buffer), NULL);
 		if (read_bytes == 0 && !remainder)
 			return (free(buffer), NULL);
@@ -94,7 +94,7 @@ char	*get_next_line(int fd)
 	remainder = ft_new_remainder(remainder);
 	return (line);
 }
-/*#include <fcntl.h>
+#include <fcntl.h>
 #include <stdio.h>
 int	main(void)
 {
@@ -102,7 +102,7 @@ int	main(void)
 	int i = 1;
 	int		fd1;
 	
-	fd1 = open("test2.txt", O_RDONLY);
+	fd1 = open("test.txt", O_RDONLY);
 
 	line = get_next_line(fd1);
 	printf("%s",line);
@@ -114,4 +114,4 @@ int	main(void)
 		free(line);
 		i++;
 	}
-}*/
+}
