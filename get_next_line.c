@@ -6,7 +6,7 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 09:38:08 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/28 09:03:04 by norabino         ###   ########.fr       */
+/*   Updated: 2024/11/28 09:08:42 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*get_next_line(int fd)
 	remainder = ft_new_remainder(remainder);
 	return (line);
 }
-#include <fcntl.h>
+/*#include <fcntl.h>
 #include <stdio.h>
 int	main(void)
 {
@@ -114,4 +114,4 @@ int	main(void)
 		free(line);
 		i++;
 	}
-}
+}*/
