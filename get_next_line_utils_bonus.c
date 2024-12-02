@@ -6,11 +6,11 @@
 /*   By: norabino <norabino@student.42perpignan.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 10:19:40 by norabino          #+#    #+#             */
-/*   Updated: 2024/11/26 09:20:38 by norabino         ###   ########.fr       */
+/*   Updated: 2024/12/02 08:38:25 by norabino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	ft_strlen(char *str)
 {
